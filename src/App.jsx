@@ -1,5 +1,7 @@
 import { CircularProgress, Slide, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
+import {  useLocation } from 'react-router-dom';
+
 
 function App() {
   const [cityName, setCityName] = useState("Tanda");
@@ -7,7 +9,8 @@ function App() {
   const [data, setData] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const location = useLocation();
+  
   useEffect(() => {
     fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=189271b827844bff7388350c44848615&units=metric`
@@ -57,6 +60,8 @@ function App() {
           </div>
 
           <h1 className="temp">{data.main.temp.toFixed()} °C</h1>
+          <p>Current path: {location.pathname}</p>
+
 
           <Slide direction="right" timeout={800} in={!loading}>
             <div className="box_container">
