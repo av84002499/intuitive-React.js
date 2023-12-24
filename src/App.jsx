@@ -2,34 +2,15 @@ import { CircularProgress, Slide, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [cityName, setCityName] = useState("Rome");
+  const [cityName, setCityName] = useState("Tanda");
   const [inputText, setInputText] = useState("");
   const [data, setData] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Function to get user's current location
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          fetchWeatherDataByCoords(latitude, longitude);
-        },
-        () => {
-          setError(true);
-          setLoading(false);
-        }
-      );
-    } else {
-      setError(true);
-      setLoading(false);
-    }
-  };
-
-  const fetchWeatherDataByCoords = (latitude, longitude) => {
+  useEffect(() => {
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=189271b827844bff7388350c44848615&units=metric`
+      `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=189271b827844bff7388350c44848615&units=metric`
     )
       .then((res) => {
         if (res.status === 200) {
@@ -44,12 +25,7 @@ function App() {
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    // Initially, try to get the user's location
-    getLocation();
-  }, []); // Empty dependency array means this effect runs once after the initial render
+  }, [cityName, error]);
 
   const handleSearch = (e) => {
     if (e.key === "Enter") {
